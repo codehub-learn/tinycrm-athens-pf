@@ -1,5 +1,8 @@
-﻿using System;
+﻿using Microsoft.EntityFrameworkCore;
+using System;
+using System.Collections.Generic;
 using System.IO;
+using System.Linq;
 
 namespace TinyCrm
 {
@@ -7,57 +10,42 @@ namespace TinyCrm
     {
         static void Main(string[] args)
         {
-            string[] productsFromFile;
+            var tinyCrmDbContext = new TinyCrmDbContext();
 
-            try {
-                productsFromFile = File.ReadAllLines("products.csv");
-            } catch (Exception) {
-                return;
-            }
+            // Insert
+            var customer = new Customer()
+            {
+                Firstname = "Xaris",
+                Lastname = "Mpouras",
+                Email = "mpouras.gr"
+            };
 
-            if (productsFromFile.Length == 0) {
-                return;
-            }
+            tinyCrmDbContext.Add(customer);
 
-            var productsArray = new Product[productsFromFile.Length];
+            var petrogiannos = new Customer()
+            {
+                CustomerId = 155,
+                Firstname = "Dimitris",
+                Lastname = "Petrogiannos",
+                Email = "petrogiannos.gr"
+            };
 
-            for (var i = 0; i < productsFromFile.Length; i++) {
-                var isDuplicate = false;
-                var values = productsFromFile[i].Split(';');
+            tinyCrmDbContext.Add(petrogiannos);
+            tinyCrmDbContext.SaveChanges();
 
-                foreach (var p in productsArray) {
-                    if (p != null && p.ProductId.Equals(values[0])) {
-                        isDuplicate = true;
-                    }
-                }
+            // Get data
+            var customer2 = tinyCrmDbContext
+                .Set<Customer>()
+                .Where(c => c.CustomerId == customer.CustomerId)
+                .SingleOrDefault();
 
-                if (!isDuplicate) {
-                    var product = new Product()
-                    {
-                        ProductId = values[0],
-                        Name = values[1],
-                        Description = values[2],
-                        Price = GetRandomPrice()
-                    };
+            // Update
+            customer2.VatNumber = "123456789";
+            tinyCrmDbContext.SaveChanges();
 
-                    productsArray[i] = product;
-                }
-            }
-
-            foreach(var p in productsArray) {
-                if (p != null) {
-                    Console.WriteLine($"{p.ProductId} {p.Name} {p.Price}");
-                }
-            }
-        }
-
-        public static decimal GetRandomPrice()
-        {
-            var random = new Random();
-            var randomNumber = random.NextDouble() * 100;
-            var roundedNumber = Math.Round(randomNumber, 2);
-
-            return (decimal)roundedNumber;
+            // Delete
+            tinyCrmDbContext.Remove(customer2);
+            tinyCrmDbContext.SaveChanges();
         }
     }
 }
