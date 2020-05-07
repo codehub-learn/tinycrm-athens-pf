@@ -55,18 +55,25 @@ namespace TinyCrm
                 .Where(c => c.TotalGross > 500M)
                 .Any();
 
+            // ------------------------------
             var product = new Product()
             {
-                ProductId = "PRD2",
+                ProductId = "PRD45454",
                 Category = ProductCategory.Mobiles,
-                Name = "IPhone 15",
+                Name = "IPhone 100",
                 Price = 1500M
             };
 
-            tinyCrmDbContext.Add(product);
-            tinyCrmDbContext.SaveChanges();
+            var order = new Order()
+            {
+                DeliveryAddress = "Athina TK 15343"
+            };
 
-            // one-to-many
+            order.OrderProducts.Add(
+                new OrderProduct() {
+                    Product = product
+                });
+
             var customerWithOrders = new Customer()
             {
                 Firstname = "Dimitris",
@@ -74,14 +81,11 @@ namespace TinyCrm
                 Email = "dtzempentzis@mail.com"
             };
 
-            customerWithOrders.Orders.Add(
-                new Order()
-                {
-                    DeliveryAddress = "Athina TK 15343"
-                });
+            customerWithOrders.Orders.Add(order);
 
             tinyCrmDbContext.Add(customerWithOrders);
             tinyCrmDbContext.SaveChanges();
+            // ====================================
 
             // Select customer with orders
             var customer5 = SearchCustomers(
