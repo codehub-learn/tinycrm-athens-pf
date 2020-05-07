@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Collections.Generic;
 
 namespace TinyCrm
 {
@@ -13,8 +14,11 @@ namespace TinyCrm
         public decimal TotalGross { get; set; }
         public bool IsActive { get; set; }
 
+        public List<Order> Orders { get; set; }
+
         public Customer()
         {
+            Orders = new List<Order>();
         }
 
         public bool IsValidVatNumber(string vatNumber)

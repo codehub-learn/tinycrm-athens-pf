@@ -24,7 +24,6 @@ namespace TinyCrm
 
             var petrogiannos = new Customer()
             {
-                CustomerId = 155,
                 Firstname = "Dimitris",
                 Lastname = "Petrogiannos",
                 Email = "petrogiannos.gr"
@@ -46,6 +45,86 @@ namespace TinyCrm
             // Delete
             tinyCrmDbContext.Remove(customer2);
             tinyCrmDbContext.SaveChanges();
+
+            // Search
+            var results = SearchCustomers(
+                new SearchCustomerOptions()
+                {
+                    VatNumber = "117003949"
+                }, tinyCrmDbContext)
+                .Where(c => c.TotalGross > 500M)
+                .Any();
+
+            var product = new Product()
+            {
+                ProductId = "PRD2",
+                Category = ProductCategory.Mobiles,
+                Name = "IPhone 15",
+                Price = 1500M
+            };
+
+            tinyCrmDbContext.Add(product);
+            tinyCrmDbContext.SaveChanges();
+
+            // one-to-many
+            var customerWithOrders = new Customer()
+            {
+                Firstname = "Dimitris",
+                Lastname = "Tzempentzis",
+                Email = "dtzempentzis@mail.com"
+            };
+
+            customerWithOrders.Orders.Add(
+                new Order()
+                {
+                    DeliveryAddress = "Athina TK 15343"
+                });
+
+            tinyCrmDbContext.Add(customerWithOrders);
+            tinyCrmDbContext.SaveChanges();
+
+            // Select customer with orders
+            var customer5 = SearchCustomers(
+                new SearchCustomerOptions()
+                {
+                    CustomerId = 18
+                }, tinyCrmDbContext)
+                .Include(c => c.Orders)
+                .SingleOrDefault();
+
+            tinyCrmDbContext.Dispose();
+        }
+
+        public static IQueryable<Customer> SearchCustomers(
+            SearchCustomerOptions options, TinyCrmDbContext dbContext)
+        {
+            if (options == null) {
+                return null;
+            }
+
+            var query = dbContext
+                .Set<Customer>()
+                .AsQueryable();
+
+            if (!string.IsNullOrWhiteSpace(options.Firstname)) {
+                query = query.Where(c => c.Firstname == options.Firstname);
+            }
+
+            if (!string.IsNullOrWhiteSpace(options.VatNumber)) {
+                query = query.Where(c => c.VatNumber == options.VatNumber);
+            }
+
+            if (options.CustomerId != null) {
+                query = query.Where(c => c.CustomerId == options.CustomerId.Value);
+            }
+
+            if (options.CreateFrom != null) {
+                query = query.Where(c => c.Created >= options.CreateFrom);
+            }
+
+            query = query.Take(500);
+
+            return query;
         }
     }
 }
