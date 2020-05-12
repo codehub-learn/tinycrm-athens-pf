@@ -1,7 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
 
-namespace TinyCrm
+namespace TinyCrm.Core.Model
 {
     public class Customer
     {

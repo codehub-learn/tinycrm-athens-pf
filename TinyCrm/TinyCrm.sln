@@ -3,7 +3,9 @@ Microsoft Visual Studio Solution File, Format Version 12.00
 # Visual Studio Version 16
 VisualStudioVersion = 16.0.30011.22
 MinimumVisualStudioVersion = 10.0.40219.1
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "TinyCrm", "TinyCrm\TinyCrm.csproj", "{5C9198A1-FBEE-4551-8367-A6EAE0FE672C}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "TinyCrm", "TinyCrm\TinyCrm.csproj", "{5C9198A1-FBEE-4551-8367-A6EAE0FE672C}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "TinyCrm.Core", "TinyCrm.Core\TinyCrm.Core.csproj", "{8A4F0731-C641-4F72-BA64-304F2F1C900D}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
@@ -15,6 +17,10 @@ Global
 		{5C9198A1-FBEE-4551-8367-A6EAE0FE672C}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{5C9198A1-FBEE-4551-8367-A6EAE0FE672C}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{5C9198A1-FBEE-4551-8367-A6EAE0FE672C}.Release|Any CPU.Build.0 = Release|Any CPU
+		{8A4F0731-C641-4F72-BA64-304F2F1C900D}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{8A4F0731-C641-4F72-BA64-304F2F1C900D}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{8A4F0731-C641-4F72-BA64-304F2F1C900D}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{8A4F0731-C641-4F72-BA64-304F2F1C900D}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE

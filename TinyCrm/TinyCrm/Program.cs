@@ -1,8 +1,10 @@
-﻿using Microsoft.EntityFrameworkCore;
-using System;
+﻿using System;
 using System.Collections.Generic;
 using System.IO;
 using System.Linq;
+using TinyCrm.Core.Data;
+using TinyCrm.Core.Services;
+using TinyCrm.Core.Services.Options;
 
 namespace TinyCrm
 {
@@ -14,17 +16,14 @@ namespace TinyCrm
                 ICustomerService customerService = new CustomerService(
                     context);
 
-                var results = customerService.SearchCustomers(
-                    new SearchCustomerOptions()
+                var customer = customerService.CreateCustomer(
+                    new CreateCustomerOptions()
                     {
-                        CustomerId = 3
-                    }).SingleOrDefault();
+                        Firstname = "Dimitris",
+                        Lastname = "Pnevmatikos",
+                        Vatnumber = "123456789"
+                    });
             }
-
-            var orderOptions = new CreateOrderOptions();
-            orderOptions.CustomerId = 5;
-            orderOptions.ProductIds.Add("1312");
-            orderOptions.ProductIds.Add("13112312312");
         }
     }
 }

@@ -1,9 +1,8 @@
 ﻿using Microsoft.EntityFrameworkCore;
-using System;
-using System.Collections.Generic;
-using System.Text;
 
-namespace TinyCrm
+using TinyCrm.Core.Model;
+
+namespace TinyCrm.Core.Data
 {
     public class TinyCrmDbContext : DbContext
     {

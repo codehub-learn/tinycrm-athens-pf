@@ -5,23 +5,23 @@ using Microsoft.EntityFrameworkCore.Infrastructure;
 using Microsoft.EntityFrameworkCore.Metadata;
 using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
-using TinyCrm;
+using TinyCrm.Core.Data;
 
-namespace TinyCrm.Migrations
+namespace TinyCrm.Core.Migrations
 {
     [DbContext(typeof(TinyCrmDbContext))]
-    [Migration("20200507165937_add-order-to-customer")]
-    partial class addordertocustomer
+    [Migration("20200512160433_initial")]
+    partial class initial
     {
         protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder
-                .HasAnnotation("ProductVersion", "3.1.3")
+                .HasAnnotation("ProductVersion", "3.1.4")
                 .HasAnnotation("Relational:MaxIdentifierLength", 128)
                 .HasAnnotation("SqlServer:ValueGenerationStrategy", SqlServerValueGenerationStrategy.IdentityColumn);
 
-            modelBuilder.Entity("TinyCrm.Customer", b =>
+            modelBuilder.Entity("TinyCrm.Core.Model.Customer", b =>
                 {
                     b.Property<int>("CustomerId")
                         .ValueGeneratedOnAdd()
@@ -54,7 +54,7 @@ namespace TinyCrm.Migrations
                     b.ToTable("Customer");
                 });
 
-            modelBuilder.Entity("TinyCrm.Order", b =>
+            modelBuilder.Entity("TinyCrm.Core.Model.Order", b =>
                 {
                     b.Property<int>("OrderId")
                         .ValueGeneratedOnAdd()
@@ -77,7 +77,22 @@ namespace TinyCrm.Migrations
                     b.ToTable("Order");
                 });
 
-            modelBuilder.Entity("TinyCrm.Product", b =>
+            modelBuilder.Entity("TinyCrm.Core.Model.OrderProduct", b =>
+                {
+                    b.Property<string>("ProductId")
+                        .HasColumnType("nvarchar(450)");
+
+                    b.Property<int>("OrderId")
+                        .HasColumnType("int");
+
+                    b.HasKey("ProductId", "OrderId");
+
+                    b.HasIndex("OrderId");
+
+                    b.ToTable("OrderProduct");
+                });
+
+            modelBuilder.Entity("TinyCrm.Core.Model.Product", b =>
                 {
                     b.Property<string>("ProductId")
                         .HasColumnType("nvarchar(450)");
@@ -99,11 +114,26 @@ namespace TinyCrm.Migrations
                     b.ToTable("Product");
                 });
 
-            modelBuilder.Entity("TinyCrm.Order", b =>
+            modelBuilder.Entity("TinyCrm.Core.Model.Order", b =>
                 {
-                    b.HasOne("TinyCrm.Customer", null)
+                    b.HasOne("TinyCrm.Core.Model.Customer", null)
                         .WithMany("Orders")
                         .HasForeignKey("CustomerId");
+                });
+
+            modelBuilder.Entity("TinyCrm.Core.Model.OrderProduct", b =>
+                {
+                    b.HasOne("TinyCrm.Core.Model.Order", "Order")
+                        .WithMany("OrderProducts")
+                        .HasForeignKey("OrderId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+
+                    b.HasOne("TinyCrm.Core.Model.Product", "Product")
+                        .WithMany()
+                        .HasForeignKey("ProductId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
                 });
 #pragma warning restore 612, 618
         }

@@ -1,6 +1,6 @@
 ﻿using System.Collections.Generic;
 
-namespace TinyCrm
+namespace TinyCrm.Core.Services.Options
 {
     public class CreateOrderOptions
     {

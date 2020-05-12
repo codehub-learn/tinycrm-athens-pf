@@ -3,8 +3,11 @@ using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
+using TinyCrm.Core.Data;
+using TinyCrm.Core.Model;
+using TinyCrm.Core.Services.Options;
 
-namespace TinyCrm
+namespace TinyCrm.Core.Services
 {
     public class CustomerService : ICustomerService
     {
