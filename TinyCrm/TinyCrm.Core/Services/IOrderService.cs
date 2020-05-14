@@ -5,6 +5,6 @@ namespace TinyCrm.Core.Services
 {
     public interface IOrderService
     {
-        Order CreateOrder(CreateOrderOptions options);
+        Order CreateOrder(CreateOrderOptions options, string something = null);
     }
 }
