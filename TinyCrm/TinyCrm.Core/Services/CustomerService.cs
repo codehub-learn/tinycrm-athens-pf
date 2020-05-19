@@ -25,6 +25,10 @@ namespace TinyCrm.Core.Services
                 return null;
             }
 
+            if (string.IsNullOrWhiteSpace(options.Vatnumber)) {
+                return null;
+            }
+
             var customer = new Customer()
             {
                 Lastname = options.Lastname,

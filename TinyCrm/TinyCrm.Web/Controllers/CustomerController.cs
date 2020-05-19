@@ -1,15 +1,12 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Threading.Tasks;
+﻿using System.Linq;
 using Microsoft.AspNetCore.Mvc;
 using TinyCrm.Core.Data;
-using TinyCrm.Core.Model;
 using TinyCrm.Core.Services;
 using TinyCrm.Core.Services.Options;
 
 namespace TinyCrm.Web.Controllers
 {
+    [Route("customer")]
     public class CustomerController : Controller
     {
         private TinyCrmDbContext dbContext_;
@@ -21,24 +18,29 @@ namespace TinyCrm.Web.Controllers
             customerService_ = new CustomerService(dbContext_);
         }
 
+        [HttpPost]
+        public IActionResult Create([FromBody] CreateCustomerOptions options)
+        {
+            var result = customerService_.CreateCustomer(options);
+
+            if (result == null) {
+                return BadRequest();
+            }
+
+            return Json(result);
+        }
+
+        [HttpGet]
         public IActionResult Index()
         {
-            var customerList = customerService_ 
+            var customerList = customerService_
                 .SearchCustomers(new SearchCustomerOptions())
                 .ToList();
 
             return Json(customerList);
         }
 
-        public IActionResult Search()
-        {
-
-        }
-
-        //400 Bad Request
-        //403 Forbidden
-        //404 Not Found
-        // 500 Internal Server Error
+        [HttpGet("{id}")]
         public IActionResult GetById(int? id)
         {
             if (id == null) {
@@ -56,6 +58,12 @@ namespace TinyCrm.Web.Controllers
             }
 
             return Json(customer);
+        }
+
+        [HttpPatch("{id}")]
+        public IActionResult UpdateCustomer(int id)
+        {
+            return Ok();
         }
     }
 }
