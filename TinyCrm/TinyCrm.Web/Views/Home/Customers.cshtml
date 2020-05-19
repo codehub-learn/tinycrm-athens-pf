@@ -1,0 +1,32 @@
+﻿@model TinyCrm.Web.Models.CustomersModel 
+@{
+    ViewData["Title"] = "Customers";
+}
+
+
+
+<h1>Customers</h1>
+
+
+<p>
+    My customers are
+    <ul>
+
+        @{
+            //razor syntax
+            foreach (var customer in Model.Customers)
+            {
+                 
+                <li> @customer.Firstname   @customer.Lastname </li>
+                    
+            }
+        }
+        </
+
+
+    </ul>
+
+
+
+</p>
+

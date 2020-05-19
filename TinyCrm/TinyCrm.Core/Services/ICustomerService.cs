@@ -11,7 +11,7 @@ namespace TinyCrm.Core.Services
     {
         IQueryable<Customer> SearchCustomers(
             SearchCustomerOptions options);
-
+        IQueryable<Customer> GetAll();
         Customer CreateCustomer(
             CreateCustomerOptions options);
     }

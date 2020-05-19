@@ -13,40 +13,43 @@ using TinyCrm.Core.Services.Options;
 
 namespace TinyCrm.Web.Controllers
 {
+    [Route("[controller]")]
     public class HomeController : Controller
     {
         private readonly ILogger<HomeController> _logger;
 
-        public HomeController(ILogger<HomeController> logger)
+        private ICustomerService customerService_;
+
+        public HomeController(ILogger<HomeController> logger, ICustomerService customerService)
         {
             _logger = logger;
+            customerService_ = customerService;
         }
 
-        [HttpDelete]
+        [HttpGet("Index")]
         public IActionResult Index()
         {
             return View();
         }
 
-        public IActionResult Privacy()
+
+        [HttpGet("Customers")]
+        public IActionResult Customers()
         {
-            using (var context = new TinyCrmDbContext()) {
-                var customerService = new CustomerService(context);
+            CustomersModel customersModel = new CustomersModel
+            {      Customers = customerService_.GetAll() .ToList()
+        };
 
-                var customer = customerService.SearchCustomers(
-                    new SearchCustomerOptions()
-                    {
-                        CustomerId = 1
-                    }).SingleOrDefault();
+            
 
-                return Json(customer);
-            }
+            return View(customersModel);
         }
 
-        [ResponseCache(Duration = 0, Location = ResponseCacheLocation.None, NoStore = true)]
-        public IActionResult Error()
-        {
-            return View(new ErrorViewModel { RequestId = Activity.Current?.Id ?? HttpContext.TraceIdentifier });
-        }
+        
+        //[ResponseCache(Duration = 0, Location = ResponseCacheLocation.None, NoStore = true)]
+        //public IActionResult Error()
+        //{
+        //    return View(new ErrorViewModel { RequestId = Activity.Current?.Id ?? HttpContext.TraceIdentifier });
+        //}
     }
 }

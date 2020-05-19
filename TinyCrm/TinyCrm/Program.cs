@@ -12,18 +12,18 @@ namespace TinyCrm
     {
         static void Main(string[] args)
         {
-            using (var context = new TinyCrmDbContext()) {
-                ICustomerService customerService = new CustomerService(
-                    context);
+            //using (var context = new TinyCrmDbContext()) {
+            //    ICustomerService customerService = new CustomerService(
+            //        context);
 
-                var customer = customerService.CreateCustomer(
-                    new CreateCustomerOptions()
-                    {
-                        Firstname = "Dimitris",
-                        Lastname = "Pnevmatikos",
-                        Vatnumber = "123456789"
-                    });
-            }
+            //    var customer = customerService.CreateCustomer(
+            //        new CreateCustomerOptions()
+            //        {
+            //            Firstname = "Dimitris",
+            //            Lastname = "Pnevmatikos",
+            //            Vatnumber = "123456789"
+            //        });
+            //}
         }
     }
 }

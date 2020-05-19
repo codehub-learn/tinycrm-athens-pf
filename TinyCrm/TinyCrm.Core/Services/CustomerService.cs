@@ -45,6 +45,11 @@ namespace TinyCrm.Core.Services
             return null;
         }
 
+        public IQueryable<Customer> GetAll()
+        {
+            return context_.Set<Customer>();
+        }
+
         public IQueryable<Customer> SearchCustomers(
             SearchCustomerOptions options)
         {

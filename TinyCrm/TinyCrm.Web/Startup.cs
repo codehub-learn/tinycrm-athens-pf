@@ -4,9 +4,12 @@ using System.Linq;
 using System.Threading.Tasks;
 using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.Hosting;
+using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Hosting;
+using TinyCrm.Core.Data;
+using TinyCrm.Core.Services;
 
 namespace TinyCrm.Web
 {
@@ -22,6 +25,13 @@ namespace TinyCrm.Web
         // This method gets called by the runtime. Use this method to add services to the container.
         public void ConfigureServices(IServiceCollection services)
         {
+            string connectionString = "Server = localhost; Database = tinycrmAth; User Id = sa; Password = passw0rd;";
+
+            services.AddDbContext<TinyCrmDbContext>(options => options.UseSqlServer(connectionString));
+            services.AddScoped<ICustomerService, CustomerService>();
+          services.AddScoped<IOrderService, OrderService>();
+         //     services.AddScoped<IOrderService, OrderService2>();
+
             services.AddControllersWithViews();
         }
 

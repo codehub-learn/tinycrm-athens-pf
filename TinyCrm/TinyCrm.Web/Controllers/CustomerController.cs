@@ -6,19 +6,21 @@ using TinyCrm.Core.Services.Options;
 
 namespace TinyCrm.Web.Controllers
 {
-    [Route("customer")]
+    [ApiController]
+    [Route("[controller]")]
     public class CustomerController : Controller
     {
-        private TinyCrmDbContext dbContext_;
+         
         private ICustomerService customerService_;
+        private IOrderService orderService_;
 
-        public CustomerController()
+        public CustomerController(ICustomerService customerService, IOrderService orderService )
         {
-            dbContext_ = new TinyCrmDbContext();
-            customerService_ = new CustomerService(dbContext_);
+            customerService_ = customerService;
+            orderService_ = orderService;
         }
 
-        [HttpPost]
+        [HttpPost("create")]
         public IActionResult Create([FromBody] CreateCustomerOptions options)
         {
             var result = customerService_.CreateCustomer(options);

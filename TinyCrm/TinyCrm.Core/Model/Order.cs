@@ -8,7 +8,7 @@ namespace TinyCrm.Core.Model
         public int OrderId { get; set; }
         public DateTimeOffset Created { get; set; }
         public string DeliveryAddress { get; set; }
-
+        
         public List<OrderProduct> OrderProducts { get; set; }
 
         public Order()
