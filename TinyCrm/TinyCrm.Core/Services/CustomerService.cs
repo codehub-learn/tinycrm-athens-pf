@@ -18,6 +18,11 @@ namespace TinyCrm.Core.Services
             context_ = context;
         }
 
+        public Customer GetCustomer(
+            int id)
+        { return context_.Set<Customer>().Find(id); }
+
+
         public Customer CreateCustomer(
             CreateCustomerOptions options)
         {

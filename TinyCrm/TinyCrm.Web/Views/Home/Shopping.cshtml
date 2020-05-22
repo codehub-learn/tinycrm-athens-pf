@@ -1,0 +1,66 @@
+﻿@model TinyCrm.Web.Models.Shopping
+@{
+    ViewData["Title"] = "Shopping";
+}
+
+
+<style>
+
+    /* Create two equal columns that floats next to each other */
+    .column {
+        box-sizing: border-box;
+        float: left;
+        width: 50%;
+        padding: 10px;
+        height: 300px; /* Should be removed. Only for demonstration */
+    }
+
+    /* Clear floats after the columns */
+    .row:after {
+        content: "";
+        display: table;
+        clear: both;
+    }
+</style>
+
+
+
+<h1>Shopping</h1>
+
+<div class="row">
+    <div class="column" style="background-color:#aaa;">
+        <h2>Available products</h2>
+
+        <ol>
+            @{
+                foreach (var product in Model.AvailableProducts)
+                {
+                    <li>
+                        <a href="#" onclick="addToBasket(  '@product.ProductId', @Model.BasketId)">
+                            @product.Name
+                        </a>
+                    </li>
+                }
+            }
+        </ol>
+    </div>
+    <div class="column" style="background-color:#bbb;">
+        <h2>Current Basket</h2>
+        <ul id="MyBasket">
+        </ul>
+    </div>
+</div>
+
+<button id="FinalizeBasket">Finalize basket</button>
+
+
+
+
+
+
+
+
+
+
+
+

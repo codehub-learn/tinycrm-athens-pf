@@ -21,9 +21,37 @@ namespace TinyCrm.Core.Services
         {
             Order order= new Order { Created= DateTime.Now  };
 
-            context_.Add(order);
-            context_.SaveChanges();
+
             return order;
+        }
+
+        OrderProduct CreateOrderProduct(OrderProductOption option)
+        {
+            OrderProduct orderProduct = new OrderProduct {
+             OrderId = option.OrderId,  ProductId =option.ProductId  
+            };
+            context_.Add(orderProduct);
+            context_.SaveChanges();
+            return orderProduct;
+
+        }
+
+        OrderProduct IOrderService.CreateOrderProduct(OrderProductOption option)
+        {
+
+            Product product = context_.Set<Product>().Find(option.ProductId);
+                
+
+            OrderProduct basketProduct = new OrderProduct
+            { OrderId= option.OrderId,
+              Product=product
+            };
+
+            context_.Set<OrderProduct> ().Add(basketProduct)    ;
+            context_.SaveChanges();
+            return basketProduct;
+
+
 
         }
     }

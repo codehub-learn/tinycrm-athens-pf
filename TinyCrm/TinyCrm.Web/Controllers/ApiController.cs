@@ -1,6 +1,7 @@
 ﻿using System.Linq;
 using Microsoft.AspNetCore.Mvc;
 using TinyCrm.Core.Data;
+using TinyCrm.Core.Model;
 using TinyCrm.Core.Services;
 using TinyCrm.Core.Services.Options;
 
@@ -8,19 +9,37 @@ namespace TinyCrm.Web.Controllers
 {
     [ApiController]
     [Route("[controller]")]
-    public class CustomerController : Controller
+    public class ApiController : Controller
     {
          
         private ICustomerService customerService_;
         private IOrderService orderService_;
+        private IProductService productService_;
 
-        public CustomerController(ICustomerService customerService, IOrderService orderService )
+        public ApiController(ICustomerService customerService, IOrderService orderService, IProductService productService)
         {
             customerService_ = customerService;
             orderService_ = orderService;
+            productService_ = productService;
         }
 
-        [HttpPost("create")]
+
+        [HttpPost("createProduct")]
+        public IActionResult CreateProduct([FromBody] CreateProductOptions options)
+        {
+            var result = productService_.CreateProduct(options);
+
+            if (result == null)
+            {
+                return BadRequest();
+            }
+
+            return Json(result);
+        }
+
+
+
+        [HttpPost("createCustomer")]
         public IActionResult Create([FromBody] CreateCustomerOptions options)
         {
             var result = customerService_.CreateCustomer(options);
@@ -31,6 +50,24 @@ namespace TinyCrm.Web.Controllers
 
             return Json(result);
         }
+
+        [HttpPost("createOrder")]
+        public IActionResult CreateOrder([FromBody] CreateOrderOptions options)
+        {
+            return Json(orderService_.CreateOrder(options));
+        }
+
+
+
+        [HttpPost("addOrderProduct")]
+         public IActionResult AdddOrderProduct(
+            [FromBody] OrderProductOption options)
+        {
+            OrderProduct ordPrd = orderService_.CreateOrderProduct(options);
+
+            return Json(ordPrd);
+        }
+
 
         [HttpGet]
         public IActionResult Index()

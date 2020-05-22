@@ -29,8 +29,8 @@ namespace TinyCrm.Web
 
             services.AddDbContext<TinyCrmDbContext>(options => options.UseSqlServer(connectionString));
             services.AddScoped<ICustomerService, CustomerService>();
-          services.AddScoped<IOrderService, OrderService>();
-         //     services.AddScoped<IOrderService, OrderService2>();
+            services.AddScoped<IOrderService, OrderService>();
+             services.AddScoped<IProductService, ProductService>();
 
             services.AddControllersWithViews();
         }
