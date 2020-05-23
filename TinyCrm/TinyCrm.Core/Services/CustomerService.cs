@@ -20,20 +20,14 @@ namespace TinyCrm.Core.Services
         public Result<Customer> CreateCustomer(
             CreateCustomerOptions options)
         {
-            var result = new Result<Customer>();
-
             if (options == null) {
-                result.ErrorCode = StatusCode.BadRequest;
-                result.ErrorText = "Null options";
-
-                return result;
+                return Result<Customer>.CreateFailed(
+                    StatusCode.BadRequest, "Null options");
             }
 
             if (string.IsNullOrWhiteSpace(options.Vatnumber)) {
-                result.ErrorCode = StatusCode.BadRequest;
-                result.ErrorText = "Null or empty VatNumber";
-
-                return result;
+                return Result<Customer>.CreateFailed(
+                    StatusCode.BadRequest, "Null or empty VatNumber");
             }
 
             var customer = new Customer()
@@ -50,20 +44,17 @@ namespace TinyCrm.Core.Services
             try {
                 rows = context_.SaveChanges();
             } catch(Exception ex) {
-                result.ErrorCode = StatusCode.InternalServerError;
-                result.ErrorText = ex.ToString();
-                
-                return result;
+                return Result<Customer>.CreateFailed(
+                    StatusCode.InternalServerError, ex.ToString());
             }
 
-            if (rows > 0) {
-                result.Data = customer;
-                result.ErrorCode = StatusCode.OK;
-            } else {
-                result.ErrorCode = StatusCode.InternalServerError;
+            if (rows <= 0) {
+                return Result<Customer>.CreateFailed(
+                    StatusCode.InternalServerError,
+                    "Customer could not be updated");
             }
 
-            return result;
+            return Result<Customer>.CreateSuccessful(customer);
         }
 
         public IQueryable<Customer> SearchCustomers(
@@ -133,7 +124,6 @@ namespace TinyCrm.Core.Services
             if (context_.SaveChanges() == 0) {
                 result.ErrorCode = StatusCode.InternalServerError;
                 result.ErrorText = $"Customer could not be updated";
-
                 return result;
             }
 
