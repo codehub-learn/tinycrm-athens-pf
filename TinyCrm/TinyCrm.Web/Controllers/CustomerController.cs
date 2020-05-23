@@ -18,19 +18,7 @@ namespace TinyCrm.Web.Controllers
             customerService_ = new CustomerService(dbContext_);
         }
 
-        [HttpPost]
-        public IActionResult Create([FromBody] CreateCustomerOptions options)
-        {
-            var result = customerService_.CreateCustomer(options);
-
-            if (result == null) {
-                return BadRequest();
-            }
-
-            return Json(result);
-        }
-
-        [HttpGet]
+        [HttpGet("index")]
         public IActionResult Index()
         {
             var customerList = customerService_
@@ -40,6 +28,20 @@ namespace TinyCrm.Web.Controllers
             return Json(customerList);
         }
 
+        [HttpPost]
+        public IActionResult Create([FromBody] CreateCustomerOptions options)
+        {
+            var result = customerService_.CreateCustomer(options);
+
+            if (result.ErrorCode != Core.StatusCode.OK) {
+                return StatusCode((int)result.ErrorCode,
+                    result.ErrorText);
+            }
+
+            return Json(result.Data);
+        }
+
+        // http://localhost/customer/5 GET: retrieve a customer's info
         [HttpGet("{id}")]
         public IActionResult GetById(int? id)
         {
@@ -60,8 +62,24 @@ namespace TinyCrm.Web.Controllers
             return Json(customer);
         }
 
+        // http://localhost/customer/5 PATCH: update a customers info
         [HttpPatch("{id}")]
-        public IActionResult UpdateCustomer(int id)
+        public IActionResult UpdateCustomer(int id, 
+            [FromBody] UpdateCustomerOptions options)
+        {
+            var result = customerService_.UpdateCustomer(id,
+                options);
+
+            if (!result) {
+                return BadRequest();
+            }
+
+            return Ok();
+        }
+
+        // http://localhost/customer/5 DELETE: remove a customer 
+        [HttpDelete("{id}")]
+        public IActionResult DeleteCustomer(int id)
         {
             return Ok();
         }

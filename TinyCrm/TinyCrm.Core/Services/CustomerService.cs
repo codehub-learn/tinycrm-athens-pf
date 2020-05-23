@@ -1,8 +1,7 @@
-﻿using Microsoft.EntityFrameworkCore.Internal;
+﻿using Microsoft.VisualBasic;
 using System;
-using System.Collections.Generic;
 using System.Linq;
-using System.Text;
+
 using TinyCrm.Core.Data;
 using TinyCrm.Core.Model;
 using TinyCrm.Core.Services.Options;
@@ -18,15 +17,23 @@ namespace TinyCrm.Core.Services
             context_ = context;
         }
 
-        public Customer CreateCustomer(
+        public Result<Customer> CreateCustomer(
             CreateCustomerOptions options)
         {
+            var result = new Result<Customer>();
+
             if (options == null) {
-                return null;
+                result.ErrorCode = StatusCode.BadRequest;
+                result.ErrorText = "Null options";
+
+                return result;
             }
 
             if (string.IsNullOrWhiteSpace(options.Vatnumber)) {
-                return null;
+                result.ErrorCode = StatusCode.BadRequest;
+                result.ErrorText = "Null or empty VatNumber";
+
+                return result;
             }
 
             var customer = new Customer()
@@ -37,12 +44,26 @@ namespace TinyCrm.Core.Services
             };
 
             context_.Add(customer);
-            
-            if (context_.SaveChanges() > 0) {
-                return customer;
+
+            var rows = 0;
+
+            try {
+                rows = context_.SaveChanges();
+            } catch(Exception ex) {
+                result.ErrorCode = StatusCode.InternalServerError;
+                result.ErrorText = ex.ToString();
+                
+                return result;
             }
 
-            return null;
+            if (rows > 0) {
+                result.Data = customer;
+                result.ErrorCode = StatusCode.OK;
+            } else {
+                result.ErrorCode = StatusCode.InternalServerError;
+            }
+
+            return result;
         }
 
         public IQueryable<Customer> SearchCustomers(
@@ -75,6 +96,33 @@ namespace TinyCrm.Core.Services
             query = query.Take(500);
 
             return query;
+        }
+
+        public bool UpdateCustomer(int customerId,
+            UpdateCustomerOptions options)
+        {
+            if (options == null) {
+                return false;
+            }
+
+            var customer = SearchCustomers(new SearchCustomerOptions
+            {
+                CustomerId = customerId
+            }).SingleOrDefault();
+
+            if (customer == null) {
+                return false;
+            }
+
+            if (!string.IsNullOrWhiteSpace(options.Email)) {
+                customer.Email = options.Email;
+            }
+
+            if (options.IsActive != null) {
+                customer.IsActive = options.IsActive.Value;
+            }
+
+            return context_.SaveChanges() > 0;
         }
     }
 }

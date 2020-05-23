@@ -1,7 +1,5 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
+﻿using System.Linq;
+
 using TinyCrm.Core.Model;
 using TinyCrm.Core.Services.Options;
 
@@ -12,7 +10,10 @@ namespace TinyCrm.Core.Services
         IQueryable<Customer> SearchCustomers(
             SearchCustomerOptions options);
 
-        Customer CreateCustomer(
+        Result<Customer> CreateCustomer(
             CreateCustomerOptions options);
+
+        bool UpdateCustomer(int customerId,
+            UpdateCustomerOptions options);
     }
 }

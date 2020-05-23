@@ -10,6 +10,7 @@ using TinyCrm.Core.Data;
 using TinyCrm.Core.Services;
 using TinyCrm.Web.Models;
 using TinyCrm.Core.Services.Options;
+using TinyCrm.Core.Model;
 
 namespace TinyCrm.Web.Controllers
 {
