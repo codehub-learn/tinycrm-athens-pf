@@ -98,11 +98,16 @@ namespace TinyCrm.Core.Services
             return query;
         }
 
-        public bool UpdateCustomer(int customerId,
+        public Result<bool> UpdateCustomer(int customerId,
             UpdateCustomerOptions options)
         {
+            var result = new Result<bool>();
+
             if (options == null) {
-                return false;
+                result.ErrorCode = StatusCode.BadRequest;
+                result.ErrorText = "Null options";
+
+                return result;
             }
 
             var customer = SearchCustomers(new SearchCustomerOptions
@@ -111,7 +116,10 @@ namespace TinyCrm.Core.Services
             }).SingleOrDefault();
 
             if (customer == null) {
-                return false;
+                result.ErrorCode = StatusCode.NotFound;
+                result.ErrorText = $"Customer with id {customerId} was not found";
+
+                return result;
             }
 
             if (!string.IsNullOrWhiteSpace(options.Email)) {
@@ -122,7 +130,17 @@ namespace TinyCrm.Core.Services
                 customer.IsActive = options.IsActive.Value;
             }
 
-            return context_.SaveChanges() > 0;
+            if (context_.SaveChanges() == 0) {
+                result.ErrorCode = StatusCode.InternalServerError;
+                result.ErrorText = $"Customer could not be updated";
+
+                return result;
+            }
+
+            result.ErrorCode = StatusCode.OK;
+            result.Data = true;
+
+            return result;
         }
     }
 }

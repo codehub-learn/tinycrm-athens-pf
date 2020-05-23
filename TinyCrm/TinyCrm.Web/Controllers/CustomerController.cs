@@ -33,7 +33,7 @@ namespace TinyCrm.Web.Controllers
         {
             var result = customerService_.CreateCustomer(options);
 
-            if (result.ErrorCode != Core.StatusCode.OK) {
+            if (!result.Success) {
                 return StatusCode((int)result.ErrorCode,
                     result.ErrorText);
             }
@@ -70,8 +70,9 @@ namespace TinyCrm.Web.Controllers
             var result = customerService_.UpdateCustomer(id,
                 options);
 
-            if (!result) {
-                return BadRequest();
+            if (!result.Success) {
+                return StatusCode((int)result.ErrorCode,
+                    result.ErrorText);
             }
 
             return Ok();

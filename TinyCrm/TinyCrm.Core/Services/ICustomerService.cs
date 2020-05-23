@@ -13,7 +13,7 @@ namespace TinyCrm.Core.Services
         Result<Customer> CreateCustomer(
             CreateCustomerOptions options);
 
-        bool UpdateCustomer(int customerId,
+        Result<bool> UpdateCustomer(int customerId,
             UpdateCustomerOptions options);
     }
 }
