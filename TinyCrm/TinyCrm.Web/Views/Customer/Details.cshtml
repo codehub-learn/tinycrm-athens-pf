@@ -22,6 +22,6 @@
         <br />
         @Model.Created
     </p>
-    <a href="#" class="btn btn-primary">Edit</a>
+    <a href="@Url.Action("Edit", "Customer", new { id = Model.CustomerId })" class="btn btn-primary">Edit</a>
   </div>
 </div>

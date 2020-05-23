@@ -41,7 +41,8 @@ namespace TinyCrm.Web.Controllers
             return Json(result.Data);
         }
 
-        // http://localhost/customer/5 GET: retrieve a customer's info
+        // http://localhost/customer/5
+        // GET: retrieve a customer's info
         [HttpGet("{id}")]
         public IActionResult Details(int? id)
         {
@@ -54,6 +55,7 @@ namespace TinyCrm.Web.Controllers
             return View(customer);
         }
 
+        // http://localhost/customer/{id}/edit
         [HttpGet("{id}/edit")]
         public IActionResult Edit(int id)
         {
@@ -66,7 +68,8 @@ namespace TinyCrm.Web.Controllers
             return View(customer);
         }
 
-        // http://localhost/customer/5 PATCH: update a customers info
+        // http://localhost/customer/5
+        // PATCH: update a customers info
         [HttpPatch("{id}")]
         public IActionResult UpdateCustomer(int id, 
             [FromBody] UpdateCustomerOptions options)
@@ -82,7 +85,8 @@ namespace TinyCrm.Web.Controllers
             return Ok();
         }
 
-        // http://localhost/customer/5 DELETE: remove a customer 
+        // http://localhost/customer/5
+        // DELETE: remove a customer 
         [HttpDelete("{id}")]
         public IActionResult DeleteCustomer(int id)
         {
