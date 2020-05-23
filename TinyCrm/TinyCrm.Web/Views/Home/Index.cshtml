@@ -1,4 +1,8 @@
-﻿@{
+﻿@using TinyCrm.Core.Model
+
+@model List<Customer>
+
+@{
     ViewData["Title"] = "Home Page";
 }
 
@@ -6,3 +10,27 @@
     <h1 class="display-4">Welcome</h1>
     <p>Learn about <a href="https://docs.microsoft.com/aspnet/core">building Web apps with ASP.NET Core</a>.</p>
 </div>
+
+<table class="customers table table-striped">
+  <thead>
+    <tr>
+      <th scope="col">#</th>
+      <th scope="col">First name</th>
+      <th scope="col">Last name</th>
+      <th scope="col">Vat number</th>
+      <th scope="col">Gross</th>
+    </tr>
+  </thead>
+  <tbody>
+    @foreach (var c in Model) {
+        <tr>
+          <th scope="row">@c.CustomerId</th>
+          <td>@c.Firstname</td>
+          <td>@c.Lastname</td>
+          <td>@c.VatNumber</td>
+          <td>@c.TotalGross</td>
+        </tr>
+    }
+  </tbody>
+</table>
+

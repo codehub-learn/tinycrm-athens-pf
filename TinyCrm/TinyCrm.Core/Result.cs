@@ -1,6 +1,4 @@
-﻿using System.IO;
-
-namespace TinyCrm.Core
+﻿namespace TinyCrm.Core
 {
     public class Result<T>
     {

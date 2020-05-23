@@ -16,32 +16,26 @@ namespace TinyCrm.Web.Controllers
 {
     public class HomeController : Controller
     {
-        private readonly ILogger<HomeController> _logger;
+        private CustomerService customerService_;
 
-        public HomeController(ILogger<HomeController> logger)
+        public HomeController()
         {
-            _logger = logger;
+            customerService_ = new CustomerService(
+                new TinyCrmDbContext());
         }
 
-        [HttpDelete]
         public IActionResult Index()
         {
-            return View();
+            var customers = customerService_.SearchCustomers(
+                    new SearchCustomerOptions())
+                .ToList();
+
+            return View(customers);
         }
 
         public IActionResult Privacy()
         {
-            using (var context = new TinyCrmDbContext()) {
-                var customerService = new CustomerService(context);
-
-                var customer = customerService.SearchCustomers(
-                    new SearchCustomerOptions()
-                    {
-                        CustomerId = 1
-                    }).SingleOrDefault();
-
-                return Json(customer);
-            }
+            return View();
         }
 
         [ResponseCache(Duration = 0, Location = ResponseCacheLocation.None, NoStore = true)]
