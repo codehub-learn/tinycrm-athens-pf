@@ -43,23 +43,27 @@ namespace TinyCrm.Web.Controllers
 
         // http://localhost/customer/5 GET: retrieve a customer's info
         [HttpGet("{id}")]
-        public IActionResult GetById(int? id)
+        public IActionResult Details(int? id)
         {
-            if (id == null) {
-                return BadRequest();
-            }
+            var customer = customerService_.SearchCustomers(
+                new SearchCustomerOptions()
+                { 
+                    CustomerId = id
+                }).SingleOrDefault();
 
-            var customer = customerService_
-                .SearchCustomers(
-                    new SearchCustomerOptions() {
-                        CustomerId = id
-                    }).SingleOrDefault();
+            return View(customer);
+        }
 
-            if (customer == null) {
-                return NotFound();
-            }
+        [HttpGet("{id}/edit")]
+        public IActionResult Edit(int id)
+        {
+            var customer = customerService_.SearchCustomers(
+                new SearchCustomerOptions()
+                { 
+                    CustomerId = id
+                }).SingleOrDefault();
 
-            return Json(customer);
+            return View(customer);
         }
 
         // http://localhost/customer/5 PATCH: update a customers info

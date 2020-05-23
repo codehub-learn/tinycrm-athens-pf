@@ -1,36 +1,40 @@
-﻿using System;
-using System.Collections.Generic;
+﻿using Microsoft.AspNetCore.Mvc;
+
 using System.Diagnostics;
 using System.Linq;
-using System.Threading.Tasks;
-using Microsoft.AspNetCore.Mvc;
-using Microsoft.Extensions.Logging;
 
 using TinyCrm.Core.Data;
-using TinyCrm.Core.Services;
-using TinyCrm.Web.Models;
-using TinyCrm.Core.Services.Options;
 using TinyCrm.Core.Model;
+using TinyCrm.Core.Services;
+using TinyCrm.Core.Services.Options;
+using TinyCrm.Web.Models;
 
 namespace TinyCrm.Web.Controllers
 {
     public class HomeController : Controller
     {
         private CustomerService customerService_;
+        private TinyCrmDbContext context;
 
         public HomeController()
         {
+            context = new TinyCrmDbContext();
             customerService_ = new CustomerService(
-                new TinyCrmDbContext());
+               context);
         }
 
         public IActionResult Index()
         {
-            var customers = customerService_.SearchCustomers(
-                    new SearchCustomerOptions())
-                .ToList();
+            var viewModel = new HomeViewModel()
+            {
+                Customers = customerService_.SearchCustomers(
+                        new SearchCustomerOptions())
+                    .ToList(), 
+                Products = context.Set<Product>()
+                    .ToList()
+            };
 
-            return View(customers);
+            return View(viewModel);
         }
 
         public IActionResult Privacy()
