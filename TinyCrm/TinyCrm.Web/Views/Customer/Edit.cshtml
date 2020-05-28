@@ -7,7 +7,9 @@
     <!-- Firstname-->
     <div class="form-group">
         <label for="firstName">First name</label>
+
         <input name="firstName" placeholder="Enter your first name"
+               data-val="true" data-val-required="Field required"
                class="js-firstname form-control" value="@Model.Firstname">
     </div>
 
