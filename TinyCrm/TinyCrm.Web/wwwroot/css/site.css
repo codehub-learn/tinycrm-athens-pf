@@ -73,3 +73,11 @@ body {
 .table {
   margin-top: 30px;
 }
+
+.field-validation-error {
+    color: red;
+}
+
+.input-validation-error {
+    border-color: red;
+}

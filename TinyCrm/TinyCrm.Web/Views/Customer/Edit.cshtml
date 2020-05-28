@@ -7,10 +7,10 @@
     <!-- Firstname-->
     <div class="form-group">
         <label for="firstName">First name</label>
-
-        <input name="firstName" placeholder="Enter your first name"
-               data-val="true" data-val-required="Field required"
+        <input name="@Html.NameFor(m => m.Firstname)" placeholder="Enter your first name"
+               data-val="true" data-val-required="Field required" data-val-email="Please enter a valid email"
                class="js-firstname form-control" value="@Model.Firstname">
+        @Html.ValidationMessageFor(m => m.Firstname)
     </div>
 
     <!-- Lastname -->

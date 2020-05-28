@@ -15,7 +15,6 @@ button.on('click', () => {
     let form = $('.js-customer-edit-form');
 
     if (!form.valid()) {
-        alert('form is not valid');
         return;
     }
 
