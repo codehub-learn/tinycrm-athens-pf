@@ -9,19 +9,17 @@ namespace TinyCrm.Web.Controllers
     [Route("customer")]
     public class CustomerController : Controller
     {
-        private TinyCrmDbContext dbContext_;
-        private ICustomerService customerService_;
+        private ICustomerService customers_;
 
-        public CustomerController()
+        public CustomerController(ICustomerService customers)
         {
-            dbContext_ = new TinyCrmDbContext();
-            customerService_ = new CustomerService(dbContext_);
+            customers_ = customers;
         }
 
         [HttpGet("index")]
         public IActionResult Index()
         {
-            var customerList = customerService_
+            var customerList = customers_
                 .SearchCustomers(new SearchCustomerOptions())
                 .ToList();
 
@@ -31,7 +29,7 @@ namespace TinyCrm.Web.Controllers
         [HttpPost]
         public IActionResult Create([FromBody] CreateCustomerOptions options)
         {
-            var result = customerService_.CreateCustomer(options);
+            var result = customers_.CreateCustomer(options);
 
             if (!result.Success) {
                 return StatusCode((int)result.ErrorCode,
@@ -46,7 +44,7 @@ namespace TinyCrm.Web.Controllers
         [HttpGet("{id}")]
         public IActionResult Details(int? id)
         {
-            var customer = customerService_.SearchCustomers(
+            var customer = customers_.SearchCustomers(
                 new SearchCustomerOptions()
                 { 
                     CustomerId = id
@@ -59,7 +57,7 @@ namespace TinyCrm.Web.Controllers
         [HttpGet("{id}/edit")]
         public IActionResult Edit(int id)
         {
-            var customer = customerService_.SearchCustomers(
+            var customer = customers_.SearchCustomers(
                 new SearchCustomerOptions()
                 { 
                     CustomerId = id
@@ -74,7 +72,7 @@ namespace TinyCrm.Web.Controllers
         public IActionResult UpdateCustomer(int id, 
             [FromBody] UpdateCustomerOptions options)
         {
-            var result = customerService_.UpdateCustomer(id,
+            var result = customers_.UpdateCustomer(id,
                 options);
 
             if (!result.Success) {
